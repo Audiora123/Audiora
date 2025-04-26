@@ -1,30 +1,22 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AudioLines, Users, Share2 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import { CreateDaoDialog } from '@/components/dao/CreateDaoDialog';
 
 const CommunityDaos = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   
-  const handleJoinDao = (daoName: string) => {
-    toast({
-      title: "DAO Joined",
-      description: `You have successfully joined the ${daoName} DAO.`,
-    });
+  const handleJoinDao = (daoId: string, daoName: string) => {
+    navigate(`/community-daos/${daoId}`);
   };
-  
-  const handleCreateDao = () => {
-    toast({
-      title: "Coming Soon",
-      description: "This feature will be available in the next update.",
-    });
-  };
-  
+
   return (
     <Layout>
       <div className="space-y-8">
@@ -34,10 +26,7 @@ const CommunityDaos = () => {
             <h1 className="text-3xl font-bold">Community DAOs</h1>
             <p className="text-muted-foreground mt-1">Form DAOs and restake audio as a group</p>
           </div>
-          <Button onClick={handleCreateDao} className="w-full md:w-auto">
-            <Users className="mr-2 h-4 w-4" />
-            Create New DAO
-          </Button>
+          <CreateDaoDialog />
         </div>
         
         {/* Search */}
@@ -65,13 +54,8 @@ const CommunityDaos = () => {
               {daosList.slice(0, 6).map((dao, index) => (
                 <DaoCard 
                   key={index}
-                  name={dao.name}
-                  description={dao.description}
-                  members={dao.members}
-                  staked={dao.staked}
-                  apy={dao.apy}
-                  backgroundImage={dao.backgroundImage}
-                  onJoin={() => handleJoinDao(dao.name)}
+                  {...dao}
+                  onJoin={() => handleJoinDao(dao.id, dao.name)}
                 />
               ))}
             </div>
@@ -82,13 +66,8 @@ const CommunityDaos = () => {
               {daosList.slice(3, 9).map((dao, index) => (
                 <DaoCard 
                   key={index}
-                  name={dao.name}
-                  description={dao.description}
-                  members={dao.members}
-                  staked={dao.staked}
-                  apy={dao.apy}
-                  backgroundImage={dao.backgroundImage}
-                  onJoin={() => handleJoinDao(dao.name)}
+                  {...dao}
+                  onJoin={() => handleJoinDao(dao.id, dao.name)}
                 />
               ))}
             </div>
@@ -99,13 +78,8 @@ const CommunityDaos = () => {
               {[...daosList].sort((a, b) => b.apy - a.apy).slice(0, 6).map((dao, index) => (
                 <DaoCard 
                   key={index}
-                  name={dao.name}
-                  description={dao.description}
-                  members={dao.members}
-                  staked={dao.staked}
-                  apy={dao.apy}
-                  backgroundImage={dao.backgroundImage}
-                  onJoin={() => handleJoinDao(dao.name)}
+                  {...dao}
+                  onJoin={() => handleJoinDao(dao.id, dao.name)}
                 />
               ))}
             </div>
@@ -163,11 +137,15 @@ interface DaoCardProps {
   apy: number;
   backgroundImage: string;
   onJoin: () => void;
+  id: string;
 }
 
-const DaoCard = ({ name, description, members, staked, apy, backgroundImage, onJoin }: DaoCardProps) => {
+const DaoCard = ({ name, description, members, staked, apy, backgroundImage, onJoin, id }: DaoCardProps) => {
   return (
-    <Card className="overflow-hidden border-audiora-secondary/20 hover:border-audiora-primary/50 transition-all">
+    <Card 
+      className="overflow-hidden border-audiora-secondary/20 hover:border-audiora-primary/50 transition-all cursor-pointer"
+      onClick={onJoin}
+    >
       <div 
         className="h-32 bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -192,15 +170,13 @@ const DaoCard = ({ name, description, members, staked, apy, backgroundImage, onJ
           </div>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button onClick={onJoin} className="w-full">Join DAO</Button>
-      </CardFooter>
     </Card>
   );
 };
 
 const daosList = [
   {
+    id: 'electronic',
     name: "Electronic Collective",
     description: "Community of electronic music producers and fans",
     members: 1458,
@@ -209,6 +185,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'jazz',
     name: "Jazz Innovators",
     description: "Supporting jazz musicians and new compositions",
     members: 872,
@@ -217,6 +194,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'hip-hop',
     name: "Hip Hop United",
     description: "Promoting hip hop artists and culture globally",
     members: 3240,
@@ -225,6 +203,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'indie-rock',
     name: "Indie Rock Alliance",
     description: "Supporting independent rock bands and venues",
     members: 967,
@@ -233,6 +212,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1499364615650-ec38552f4f34?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'classical',
     name: "Classical Ensemble",
     description: "Preserving and promoting classical music compositions",
     members: 581,
@@ -241,6 +221,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'future-bass',
     name: "Future Bass Collective",
     description: "Pushing the boundaries of future bass and electronic music",
     members: 1205,
@@ -249,6 +230,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'folk',
     name: "Folk Traditions",
     description: "Celebrating folk music from around the world",
     members: 723,
@@ -257,6 +239,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'ambient',
     name: "Ambient Soundscapes",
     description: "Creating and sharing ambient and atmospheric music",
     members: 495,
@@ -265,6 +248,7 @@ const daosList = [
     backgroundImage: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=500&auto=format&fit=crop"
   },
   {
+    id: 'metal',
     name: "Metal Masters",
     description: "United community of metal musicians and fans",
     members: 1658,
