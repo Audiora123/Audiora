@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/layout/Layout';
-import { AudioWaveform, Community, Link2, Wallet } from 'lucide-react';
+import { AudioWaveform, Users, Link2, Wallet, Mic2 } from 'lucide-react';
 import AudioVisualizer from '@/components/audio/AudioVisualizer';
 
 const Index = () => {
@@ -81,7 +81,7 @@ const Index = () => {
             <TabsContent value="community" className="space-y-6">
               <div className="grid md:grid-cols-3 gap-6">
                 <FeatureCard 
-                  icon={<Community className="h-10 w-10 text-audiora-primary" />}
+                  icon={<Users className="h-10 w-10 text-audiora-primary" />}
                   title="Audio DAOs" 
                   description="Form decentralized autonomous organizations around music genres or artist collectives."
                 />
@@ -105,7 +105,7 @@ const Index = () => {
             <TabsContent value="creators" className="space-y-6">
               <div className="grid md:grid-cols-3 gap-6">
                 <FeatureCard 
-                  icon={<Mic className="h-10 w-10 text-audiora-primary" />}
+                  icon={<Mic2 className="h-10 w-10 text-audiora-primary" />}
                   title="Social Rewards" 
                   description="Lock rewards behind social actions and pay out listeners and promoters from bounty pools."
                 />
@@ -115,7 +115,7 @@ const Index = () => {
                   description="Earn AUDIORA tokens directly from listeners, without intermediaries taking large cuts of your revenue."
                 />
                 <FeatureCard 
-                  icon={<Community className="h-10 w-10 text-audiora-primary" />}
+                  icon={<Users className="h-10 w-10 text-audiora-primary" />}
                   title="Fan Communities" 
                   description="Build and engage with your own community of supporters through token-gated exclusive content."
                 />

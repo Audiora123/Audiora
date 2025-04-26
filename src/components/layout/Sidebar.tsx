@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { AudioWaveform, Community, Link2, Mic, Users, Volume2, Wallet } from 'lucide-react';
+import { AudioWaveform, Users, Link2, Mic2, Volume2, Wallet } from 'lucide-react';
 import {
   Sidebar as SidebarComponent,
   SidebarContent,
@@ -26,12 +26,12 @@ const navItems = [
   },
   {
     title: "Create",
-    icon: Mic,
+    icon: Mic2,
     path: "/create"
   },
   {
     title: "Community DAOs",
-    icon: Community,
+    icon: Users,
     path: "/community-daos"
   },
   {

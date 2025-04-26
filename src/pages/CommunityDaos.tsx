@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AudioLines, Community, Share2, Users } from 'lucide-react';
+import { AudioLines, Users, Share2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const CommunityDaos = () => {
@@ -36,7 +35,7 @@ const CommunityDaos = () => {
             <p className="text-muted-foreground mt-1">Form DAOs and restake audio as a group</p>
           </div>
           <Button onClick={handleCreateDao} className="w-full md:w-auto">
-            <Community className="mr-2 h-4 w-4" />
+            <Users className="mr-2 h-4 w-4" />
             Create New DAO
           </Button>
         </div>
@@ -114,7 +113,7 @@ const CommunityDaos = () => {
           
           <TabsContent value="your-daos" className="mt-6">
             <div className="text-center py-8">
-              <Community className="mx-auto h-12 w-12 text-muted-foreground mb-3" />
+              <Users className="mx-auto h-12 w-12 text-muted-foreground mb-3" />
               <h3 className="text-xl font-medium mb-2">No DAOs Joined Yet</h3>
               <p className="text-muted-foreground mb-6">Join a DAO to see it listed here</p>
               <Button onClick={() => document.querySelector('[value="trending"]')?.dispatchEvent(new Event('click'))}>
