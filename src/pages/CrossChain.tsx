@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +14,8 @@ const CrossChain = () => {
   const [fromChain, setFromChain] = useState('ethereum');
   const [toChain, setToChain] = useState('polygon');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [slippage, setSlippage] = useState('0.5');
+  const [transactions, setTransactions] = useState<any[]>([]);
   
   const handleBridgeTokens = () => {
     if (!amount || parseFloat(amount) <= 0) {
@@ -30,6 +31,17 @@ const CrossChain = () => {
     
     // Simulate processing delay
     setTimeout(() => {
+      const newTransaction = {
+        id: Date.now(),
+        type: 'Bridge',
+        amount: `${amount} AUDIORA`,
+        from: networks[fromChain].name,
+        to: networks[toChain].name,
+        status: 'Completed',
+        timestamp: new Date().toISOString()
+      };
+      
+      setTransactions(prev => [newTransaction, ...prev]);
       setIsProcessing(false);
       toast({
         title: "Tokens Bridged",
@@ -124,6 +136,23 @@ const CrossChain = () => {
                 </div>
                 
                 <div className="space-y-2">
+                  <Label htmlFor="slippage">Slippage Tolerance</Label>
+                  <div className="flex space-x-2">
+                    <Select value={slippage} onValueChange={setSlippage}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="0.1">0.1%</SelectItem>
+                        <SelectItem value="0.5">0.5%</SelectItem>
+                        <SelectItem value="1.0">1.0%</SelectItem>
+                        <SelectItem value="2.0">2.0%</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
                   <Label htmlFor="amount">Amount</Label>
                   <div className="flex space-x-2">
                     <Input
@@ -149,6 +178,10 @@ const CrossChain = () => {
                   <div className="flex justify-between font-medium">
                     <span>You Will Receive</span>
                     <span>{amount ? (parseFloat(amount) * 0.999).toFixed(3) : '0'} AUDIORA</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Slippage Tolerance</span>
+                    <span>{slippage}%</span>
                   </div>
                 </div>
               </CardContent>
@@ -197,14 +230,32 @@ const CrossChain = () => {
               <CardHeader>
                 <CardTitle>Recent Transactions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <EmptyTransactions />
+              <CardContent>
+                {transactions.length === 0 ? (
+                  <EmptyTransactions />
+                ) : (
+                  <div className="space-y-4">
+                    {transactions.map((tx) => (
+                      <div key={tx.id} className="flex flex-col space-y-2 p-3 rounded-lg hover:bg-card">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">{tx.type}</span>
+                          <span className="text-sm text-muted-foreground">
+                            {new Date(tx.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {tx.amount} • {tx.from} → {tx.to}
+                        </div>
+                        <div className="text-xs text-audiora-primary">{tx.status}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
         </div>
         
-        {/* How it works section */}
         <div className="border border-border rounded-lg p-6 bg-card/50 mt-10">
           <h2 className="text-2xl font-semibold mb-4">How Cross-Chain Audio Works</h2>
           <p className="text-muted-foreground mb-6">
